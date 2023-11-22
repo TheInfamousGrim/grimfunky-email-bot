@@ -2,13 +2,23 @@ package main
 
 import (
 	"fmt"
-	"github.com/bwmarrin/discordgo"
+	"log"
 	"os"
 	"os/signal"
 	"syscall"
+
+	"github.com/bwmarrin/discordgo"
+	"github.com/joho/godotenv"
 )
 
 func main() {
+	// Load environment variables
+	err := godotenv.Load()
+	isProd := os.Getenv("PROD_ENV")
+	if isProd == "false" && err != nil {
+		log.Fatal("Error loading environment variables")
+	}
+
 	// Create a new session using the DISCORD_TOKEN environment variable from Railway
 	dg, err := discordgo.New("Bot " + os.Getenv("DISCORD_TOKEN"))
 	if err != nil {
@@ -46,12 +56,12 @@ func messageCreate(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	if m.Content == "ping" {
-		s.ChannelMessageSend(m.ChannelID, "Pong 🏓")
+		s.ChannelMessageSend(m.ChannelID, "Gmail Bot Pong 🏓")
 		return
 	}
 
 	if m.Content == "hello" {
-		s.ChannelMessageSend(m.ChannelID, "Choo choo! 🚅")
+		s.ChannelMessageSend(m.ChannelID, "Gmail Bot goes Choo choo! 🚅")
 		return
 	}
 }
